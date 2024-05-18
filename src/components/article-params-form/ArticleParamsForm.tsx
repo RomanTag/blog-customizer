@@ -19,8 +19,6 @@ import {
 	backgroundColors
 } from 'src/constants/articleProps';
 
-
-
 type ArticleParamsFormProps = {
 	appState: ArticleStateType;
 	formState: ArticleStateType;
