@@ -9,7 +9,7 @@ export const useFormToggle = (
 	const [isOpen, setIsOpen] = useState<boolean>(initialState);
 
 	const toggle: OnClick = useCallback(() => {
-		setIsOpen(prevIsOpen => !prevIsOpen);
+		setIsOpen((prevIsOpen) => !prevIsOpen);
 	}, []);
 
 	useEffect(() => {
