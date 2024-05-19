@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useCallback, useState } from 'react';
+import { FormEvent, useRef, useCallback } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
@@ -31,7 +31,6 @@ type ArticleParamsFormProps = {
 	changeBackgroundColor: (selected: OptionType) => void;
 }
 
-
 export const ArticleParamsForm = ({
 	appState,
 	formState,
@@ -49,6 +48,7 @@ export const ArticleParamsForm = ({
 	const handleApplyState = useCallback((event: FormEvent) => {
 		event.preventDefault();
 		applyState(event);
+		toggle();
 	}, [applyState]);
 
 	const handleResetState = useCallback(() => {

@@ -31,25 +31,6 @@ export const App = () => {
 	const handleChange = (field: keyof ArticleStateType) => (selected: OptionType) => {
 		setFormState(prevState => ({ ...prevState, [field]: selected }));
 	}
-	// const changeFontFamily = (selected: OptionType) => {
-	// 	setFormState({ ...formState, fontFamilyOption: selected });
-	// };
-
-	// const changeFontColor = (selected: OptionType) => {
-	// 	setFormState({ ...formState, fontColor: selected });
-	// };
-
-	// const changeBackgroundColor = (selected: OptionType) => {
-	// 	setFormState({ ...formState, backgroundColor: selected });
-	// };
-
-	// const changeContentWidth = (selected: OptionType) => {
-	// 	setFormState({ ...formState, contentWidth: selected });
-	// };
-
-	// const changeFontSize = (selected: OptionType) => {
-	// 	setFormState({ ...formState, fontSizeOption: selected });
-	// };
 
 	const props = {
 		appState,
