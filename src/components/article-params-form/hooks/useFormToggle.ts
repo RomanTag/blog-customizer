@@ -10,11 +10,11 @@ export const useFormToggle = (
 
 	const toggle: OnClick = useCallback(() => {
 		setIsOpen(prevIsOpen => !prevIsOpen);
-	}, [isOpen]);
+	}, []);
 
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
-			if (event.key == 'Escape') setIsOpen(false);
+			if (event.key === 'Escape') setIsOpen(false);
 		};
 
 		const checkTarget = (target: EventTarget): boolean => {
