@@ -1,4 +1,3 @@
-// tests/example.test.ts
 import { test, expect } from '@playwright/test';
 
 test('simple test', async ({ page }) => {

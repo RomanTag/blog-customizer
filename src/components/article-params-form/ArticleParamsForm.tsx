@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useCallback } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
@@ -16,50 +16,52 @@ import {
 	contentWidthArr,
 	OptionType,
 	ArticleStateType,
-	backgroundColors
+	backgroundColors,
+	defaultArticleState,
 } from 'src/constants/articleProps';
 
 type ArticleParamsFormProps = {
-	appState: ArticleStateType;
-	formState: ArticleStateType;
-	applyState: (event: FormEvent) => void;
-	resetState: () => void;
-	changeFontFamily: (selected: OptionType) => void;
-	changeFontColor: (selected: OptionType) => void;
-	changeFontSize: (selected: OptionType) => void;
-	changeContentWidth: (selected: OptionType) => void;
-	changeBackgroundColor: (selected: OptionType) => void;
-}
+	initialState: ArticleStateType;
+	onApply: (state: ArticleStateType) => void;
+};
 
 export const ArticleParamsForm = ({
-	appState,
-	formState,
-	applyState,
-	resetState,
-	changeFontFamily,
-	changeFontColor,
-	changeFontSize,
-	changeContentWidth,
-	changeBackgroundColor
+	initialState,
+	onApply,
 }: ArticleParamsFormProps) => {
+	const [formState, setFormState] = useState<ArticleStateType>(initialState);
 	const formRef = useRef<HTMLFormElement | null>(null);
 	const { isOpen, toggle } = useFormToggle(false, formRef);
 
-	const handleApplyState = useCallback((event: FormEvent) => {
+	const handleApplyState = (event: FormEvent) => {
 		event.preventDefault();
-		applyState(event);
+		onApply(formState);
 		toggle();
-	}, [applyState]);
+	};
 
-	const handleResetState = useCallback(() => {
-		resetState();
-	}, [resetState]);
+	const handleResetState = () => {
+		setFormState(defaultArticleState);
+		onApply(defaultArticleState);
+		toggle();
+	};
+
+	const handleChange =
+		(field: keyof ArticleStateType) => (selected: OptionType) => {
+			setFormState((prevState) => ({ ...prevState, [field]: selected }));
+		};
 
 	return (
 		<>
 			<ArrowButton onClick={toggle} isOpen={isOpen} />
-			<aside className={clsx(styles.container, { [styles.container_open]: isOpen })}>
-				<form className={styles.form} ref={formRef} onSubmit={handleApplyState}>
+			<aside
+				className={clsx(styles.container, styles.scrollbar, {
+					[styles.container_open]: isOpen,
+				})}>
+				<form
+					className={styles.form}
+					ref={formRef}
+					onSubmit={handleApplyState}
+					onReset={handleResetState}>
 					<Text as='h2' size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
@@ -67,36 +69,36 @@ export const ArticleParamsForm = ({
 						options={fontFamilyOptions}
 						selected={formState.fontFamilyOption}
 						title='Шрифт'
-						onChange={changeFontFamily}
+						onChange={handleChange('fontFamilyOption')}
 					/>
 					<RadioGroup
 						name='fontSize'
 						title='Размер шрифта'
 						options={fontSizeOptions}
 						selected={formState.fontSizeOption}
-						onChange={changeFontSize}
+						onChange={handleChange('fontSizeOption')}
 					/>
 					<Select
 						options={fontColors}
 						selected={formState.fontColor}
 						title='Цвет шрифта'
-						onChange={changeFontColor}
+						onChange={handleChange('fontColor')}
 					/>
 					<Separator />
 					<Select
 						options={backgroundColors}
 						selected={formState.backgroundColor}
 						title='Цвет фона'
-						onChange={changeBackgroundColor}
+						onChange={handleChange('backgroundColor')}
 					/>
 					<Select
 						options={contentWidthArr}
 						selected={formState.contentWidth}
 						title='Ширина контента'
-						onChange={changeContentWidth}
+						onChange={handleChange('contentWidth')}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={handleResetState} />
+						<Button title='Сбросить' type='reset' />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>

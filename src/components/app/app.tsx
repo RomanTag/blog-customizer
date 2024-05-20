@@ -1,13 +1,12 @@
-import { CSSProperties, useState, FormEvent } from "react";
-import { Article } from "../article";
-import { ArticleParamsForm } from "../article-params-form";
+import { CSSProperties } from 'react';
+import { Article } from '../article';
+import { ArticleParamsForm } from '../article-params-form';
 import {
 	defaultArticleState,
 	ArticleStateType,
-	OptionType,
-} from '../../constants/articleProps'
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import '../../styles/index.scss'
+} from '../../constants/articleProps';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import '../../styles/index.scss';
 import styles from '../../styles/index.module.scss';
 
 export const App = () => {
@@ -16,32 +15,8 @@ export const App = () => {
 		defaultArticleState
 	);
 
-	const [formState, setFormState] = useState(appState);
-
-	const resetState = () => {
-		setAppState(defaultArticleState);
-		setFormState(defaultArticleState);
-	}
-
-	const applyState = (event: FormEvent) => {
-		event.preventDefault();
-		setAppState(formState);
-	};
-
-	const handleChange = (field: keyof ArticleStateType) => (selected: OptionType) => {
-		setFormState(prevState => ({ ...prevState, [field]: selected }));
-	}
-
-	const props = {
-		appState,
-		formState,
-		applyState,
-		resetState,
-		changeBackgroundColor: handleChange('backgroundColor'),
-		changeFontColor: handleChange('fontColor'),
-		changeFontFamily: handleChange('fontFamilyOption'),
-		changeFontSize: handleChange('fontSizeOption'),
-		changeContentWidth: handleChange('contentWidth')
+	const applyState = (newState: ArticleStateType) => {
+		setAppState(newState);
 	};
 
 	const mainStyle: CSSProperties = {
@@ -53,10 +28,8 @@ export const App = () => {
 	} as CSSProperties;
 
 	return (
-		<main
-			className={styles.main}
-			style={mainStyle}>
-			<ArticleParamsForm {...props} />
+		<main className={styles.main} style={mainStyle}>
+			<ArticleParamsForm initialState={appState} onApply={applyState} />
 			<Article />
 		</main>
 	);

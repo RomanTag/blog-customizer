@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { OnClick } from 'src/components/arrow-button/ArrowButton';
 import arrowButtonStyles from '../../arrow-button/ArrowButton.module.scss';
+import styles from '../ArticleParamsForm.module.scss';
 
 export const useFormToggle = (
 	initialState = false,
@@ -19,17 +20,28 @@ export const useFormToggle = (
 
 		const checkTarget = (target: EventTarget): boolean => {
 			const buttonElement = target as HTMLElement;
+			const isScrollbarClick = (target as HTMLElement).classList.contains(
+				styles.scrollbar
+			);
 			return (
 				!buttonElement.classList.contains(arrowButtonStyles.arrow) &&
-				!buttonElement.classList.contains(arrowButtonStyles.container)
+				!buttonElement.classList.contains(arrowButtonStyles.container) &&
+				!isScrollbarClick
 			);
 		};
 
 		const handleOutsideClick = (event: MouseEvent) => {
 			const { target } = event;
+			const isScrollbarClick =
+				target instanceof HTMLElement &&
+				(target === document.documentElement ||
+					target === document.body ||
+					target.classList.contains('scrollbar'));
+
 			if (
 				target instanceof Node &&
 				!form.current?.contains(target) &&
+				!isScrollbarClick &&
 				checkTarget(target)
 			) {
 				setIsOpen(false);
